@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUẢN LÝ HỌC PHÍ - PHONG CÁCH TRÒN TRỊA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #fdfcf0;
+            --card-bg: #ffffff;
+            --primary-pastel: #a2d2ff;
+            --secondary-pastel: #ffafcc;
+            --success-bg: #b9fbc0;
+            --text-color: #333;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--bg-color);
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 18px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            box-sizing: border-box;
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        h2 { 
+            color: #5fa8d3; 
+            margin: 0;
+            font-weight: 900; 
+            font-size: 1.6em; 
+        }
+
+        .author-tag {
+            font-size: 0.75em;
+            color: #888;
+            font-weight: 400;
+            margin-top: 5px;
+            display: block;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: 900; margin-bottom: 8px; font-size: 1.1em; color: #555; }
+
+        input, select {
+            width: 100%;
+            padding: 15px;
+            border: 3px solid var(--primary-pastel);
+            border-radius: 18px;
+            box-sizing: border-box;
+            font-weight: 700;
+            outline: none;
+            font-family: 'Nunito', sans-serif;
+            font-size: 1em;
+        }
+
+        button {
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 20px;
+            color: white;
+            font-weight: 900;
+            cursor: pointer;
+            margin-top: 15px;
+            font-size: 1.2em;
+            font-family: 'Nunito', sans-serif;
+            box-shadow: 0 6px 0 #81b9ee;
+            transition: 0.2s;
+        }
+
+        button:active { transform: translateY(4px); box-shadow: 0 2px 0 #81b9ee; }
+
+        #btnSave { background-color: var(--primary-pastel); }
+        #btnCancel { background-color: #ccc; box-shadow: 0 6px 0 #999; display: none; }
+
+        .summary-box {
+            width: 100%;
+            max-width: 500px;
+            margin: 20px 0;
+            padding: 25px;
+            background: var(--secondary-pastel);
+            border-radius: 30px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 8px 20px rgba(255, 175, 204, 0.4);
+            box-sizing: border-box;
+        }
+
+        #monthLabel { font-weight: 900; font-size: 1.2em; text-transform: uppercase; margin-bottom: 10px; display: block; }
+        #totalValue { font-weight: 900; font-size: 2.2em; display: block; letter-spacing: -1px; }
+
+        .filter-area {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 2px solid rgba(255,255,255,0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+        }
+
+        #filterMonth {
+            padding: 10px;
+            border-radius: 15px;
+            border: none;
+            font-weight: 900;
+            color: var(--secondary-pastel);
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        .student-list { width: 100%; max-width: 500px; }
+
+        .student-card {
+            background: white;
+            padding: 20px;
+            border-radius: 25px;
+            margin-bottom: 15px;
+            border-left: 12px solid #eee;
+            position: relative;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.03);
+        }
+
+        .student-card.paid { border-left-color: var(--success-bg); }
+
+        .actions { position: absolute; top: 15px; right: 15px; display: flex; flex-direction: column; gap: 8px; }
+        .action-btn { padding: 8px 15px; border-radius: 12px; font-size: 0.8em; font-weight: 900; cursor: pointer; text-align: center; }
+        .edit-btn { background: #fef3c7; color: #92400e; }
+        .resign-btn { background: #333; color: #fff; }
+
+        .info-row { margin: 8px 0; font-size: 1.1em; padding-right: 80px; line-height: 1.4; }
+        b { font-weight: 900; color: #000; }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 10px;
+            font-size: 0.9em;
+            font-weight: 900;
+            margin-top: 5px;
+        }
+        .status-paid { background: var(--success-bg); color: #166534; }
+        .status-unpaid { background: #ffd7d7; color: #991b1b; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header-section">
+            <h2 id="formTitle">📚 QUẢN LÝ HỌC PHÍ</h2>
+            <span class="author-tag">Tạo bởi Ms. Thúy</span>
+        </div>
+        
+        <input type="hidden" id="editId">
+        
+        <div class="form-group">
+            <label>Họ tên học sinh</label>
+            <input type="text" id="name" placeholder="Nhập tên học sinh...">
+        </div>
+
+        <div class="form-group" style="display: flex; gap: 10px;">
+            <div style="flex: 1;">
+                <label>Ngày bắt đầu</label>
+                <input type="date" id="startDate">
+            </div>
+            <div style="flex: 1;">
+                <label>Ngày thu tiền</label>
+                <input type="date" id="payDate">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Số tiền (VNĐ)</label>
+            <input type="number" id="amount" placeholder="Ví dụ: 500000">
+        </div>
+
+        <div class="form-group">
+            <label>Trạng thái đóng học</label>
+            <select id="status">
+                <option value="Chưa thu">❌ CHƯA THU</option>
+                <option value="Đã thu">✅ ĐÃ THU</option>
+            </select>
+        </div>
+
+        <button id="btnSave" onclick="handleSave()">LƯU THÔNG TIN</button>
+        <button id="btnCancel" onclick="resetForm()">HỦY CHỈNH SỬA</button>
+    </div>
+
+    <div class="summary-box">
+        <span id="monthLabel">TỔNG THU THÁNG ...</span>
+        <span id="totalValue">0 VNĐ</span>
+        
+        <div class="filter-area">
+            <label style="font-weight: 900; font-size: 0.9em;">CHỌN THÁNG:</label>
+            <select id="filterMonth" onchange="renderList()">
+                <option value="01">Tháng 1</option><option value="02">Tháng 2</option>
+                <option value="03">Tháng 3</option><option value="04">Tháng 4</option>
+                <option value="05">Tháng 5</option><option value="06">Tháng 6</option>
+                <option value="07">Tháng 7</option><option value="08">Tháng 8</option>
+                <option value="09">Tháng 9</option><option value="10">Tháng 10</option>
+                <option value="11">Tháng 11</option><option value="12">Tháng 12</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="student-list" id="studentList"></div>
+
+<script>
+    let students = JSON.parse(localStorage.getItem('fee_history_v1')) || [];
+    let isEditing = false;
+
+    function formatDateVN(dateStr) {
+        if (!dateStr) return "---";
+        const [y, m, d] = dateStr.split('-');
+        return `${d}/${m}/${y}`;
+    }
+
+    window.onload = () => {
+        const currentMonth = String(new Date().getMonth() + 1).padStart(2, '0');
+        document.getElementById('filterMonth').value = currentMonth;
+        renderList();
+    };
+
+    function handleSave() {
+        const name = document.getElementById('name').value;
+        const startDate = document.getElementById('startDate').value;
+        const payDate = document.getElementById('payDate').value;
+        const amount = document.getElementById('amount').value;
+        const status = document.getElementById('status').value;
+        const editId = document.getElementById('editId').value;
+
+        if(!name || !amount || !payDate) {
+            alert("Bạn ơi, nhập thiếu thông tin rồi!");
+            return;
+        }
+
+        const payMonth = payDate.split('-')[1];
+
+        if (isEditing) {
+            students = students.map(s => {
+                if(s.id == editId) {
+                    let newRecords = {...s.records};
+                    newRecords[payMonth] = { amount: parseFloat(amount), status, payDate };
+                    return { ...s, name, startDate, records: newRecords };
+                }
+                return s;
+            });
+        } else {
+            const studentId = Date.now();
+            let records = {};
+            records[payMonth] = { amount: parseFloat(amount), status, payDate };
+            students.push({ id: studentId, name, startDate, records, endMonth: null });
+        }
+
+        saveAndRender();
+        resetForm();
+    }
+
+    function saveAndRender() {
+        localStorage.setItem('fee_history_v1', JSON.stringify(students));
+        renderList();
+    }
+
+    function renderList() {
+        const listDiv = document.getElementById('studentList');
+        const monthLabel = document.getElementById('monthLabel');
+        const totalValue = document.getElementById('totalValue');
+        const fMonth = document.getElementById('filterMonth').value;
+        
+        monthLabel.innerText = "TỔNG THU THÁNG " + parseInt(fMonth);
+        listDiv.innerHTML = '';
+        let total = 0;
+
+        students.forEach(s => {
+            if (s.endMonth && parseInt(fMonth) > parseInt(s.endMonth)) return; 
+
+            const record = s.records[fMonth];
+            const isPaid = record && record.status === "Đã thu";
+            if(isPaid) total += record.amount;
+
+            const card = document.createElement('div');
+            card.className = `student-card ${isPaid ? 'paid' : ''}`;
+            card.innerHTML = `
+                <div class="actions">
+                    <div class="action-btn edit-btn" onclick="editStudent(${s.id})">SỬA</div>
+                    <div class="action-btn resign-btn" onclick="setResign(${s.id}, '${fMonth}')">NGHỈ</div>
+                </div>
+                <div class="info-row"><b>Học sinh:</b> ${s.name}</div>
+                <div class="info-row">🗓️ Bắt đầu: ${formatDateVN(s.startDate)}</div>
+                <div class="info-row">💰 Ngày thu: <b>${record ? formatDateVN(record.payDate) : '---'}</b></div>
+                <div class="info-row">💵 Số tiền: <b>${record ? record.amount.toLocaleString() : 0} VNĐ</b></div>
+                <div class="info-row">
+                    <span class="status-badge ${isPaid ? 'status-paid' : 'status-unpaid'}">
+                        ${record ? (isPaid ? '✅ ĐÃ THU' : '❌ CHƯA THU') : '⚠️ TRỐNG'}
+                    </span>
+                    ${s.endMonth == fMonth ? '<br><span style="color:red; font-size:12px; font-weight:900;">[THÁNG CUỐI]</span>' : ''}
+                </div>
+            `;
+            listDiv.appendChild(card);
+        });
+
+        totalValue.innerText = total.toLocaleString() + " VNĐ";
+    }
+
+    function setResign(id, month) {
+        if(confirm(`Học sinh này nghỉ học từ tháng ${parseInt(month)} đúng không?`)) {
+            students = students.map(s => {
+                if(s.id === id) return { ...s, endMonth: month };
+                return s;
+            });
+            saveAndRender();
+        }
+    }
+
+    function editStudent(id) {
+        const s = students.find(item => item.id === id);
+        const fMonth = document.getElementById('filterMonth').value;
+        const record = s.records[fMonth];
+
+        document.getElementById('name').value = s.name;
+        document.getElementById('startDate').value = s.startDate;
+        document.getElementById('editId').value = s.id;
+        
+        if(record) {
+            document.getElementById('payDate').value = record.payDate;
+            document.getElementById('amount').value = record.amount;
+            document.getElementById('status').value = record.status;
+        }
+
+        isEditing = true;
+        document.getElementById('btnSave').innerText = "CẬP NHẬT";
+        document.getElementById('btnCancel').style.display = "block";
+        document.getElementById('formTitle').innerText = "✏️ CHỈNH SỬA";
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function resetForm() {
+        isEditing = false;
+        document.getElementById('editId').value = '';
+        document.getElementById('name').value = '';
+        document.getElementById('startDate').value = '';
+        document.getElementById('payDate').value = '';
+        document.getElementById('amount').value = '';
+        document.getElementById('btnSave').innerText = "LƯU DỮ LIỆU";
+        document.getElementById('btnCancel').style.display = "none";
+        document.getElementById('formTitle').innerText = "📚 QUẢN LÝ HỌC PHÍ";
+    }
+</script>
+</body>
+</html>
